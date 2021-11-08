@@ -213,7 +213,7 @@ while True:
         cv2.destroyAllWindows()
         break
 drawTris(tris,drimg)
-drawTriOutlines(tris,drimg)
+#drawTriOutlines(tris,drimg)
 alpha=1
 blimg=cv2.addWeighted(drimg,alpha,img,1-alpha,0.0)
 cv2.imshow('tris',blimg)
