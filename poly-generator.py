@@ -34,7 +34,7 @@ class Triangle:
         if self.invalid: return
         cv2.drawContours(drimg,self.ctr,-1,(int(self.mean[0]),int(self.mean[1]),int(self.mean[2])),-1)
     def drawOutline(self,drimg):
-        cv2.drawContours(drimg,self.ctr,-1,(0,150,255),3)
+        cv2.drawContours(drimg,self.ctr,-1,(255,255,0),1)
     def drawErrors(self,drimg):
         cv2.drawContours(drimg,self.ctr,-1,(self.getError(),0,0),-1)
     def getError(self):
@@ -47,7 +47,7 @@ class Triangle:
         dimg=cv2.cvtColor(dimg,cv2.COLOR_BGR2GRAY)
         mdimg=dimg*self.mask
         m=cv2.mean(dimg,mask=self.mask)[0]
-        mx=np.array(mdimg).max()
+        mx=np.abs(np.array(mdimg)).max()
         self.error=m+(1.5*mx)+(250*(self.msum/self.mmsum))
         return self.error
     def checkPointWithin(self,p):
@@ -139,6 +139,11 @@ def drawTris(ts,img):
     for t in ts:
         if t is not None:
             t.draw(img)
+def drawTriOutlines(ts,img):
+    for t in ts:
+        if t is not None:
+            t.drawOutline(img)
+            
 def append(nl,tri):
     if not tri.invalid:
         nl.append(tri)
@@ -208,6 +213,7 @@ while True:
         cv2.destroyAllWindows()
         break
 drawTris(tris,drimg)
+drawTriOutlines(tris,drimg)
 alpha=1
 blimg=cv2.addWeighted(drimg,alpha,img,1-alpha,0.0)
 cv2.imshow('tris',blimg)
